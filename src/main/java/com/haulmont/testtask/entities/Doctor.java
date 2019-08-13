@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Doctor")
 public class Doctor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -33,6 +34,8 @@ public class Doctor {
         this.patronymic = patronymic;
         this.specialization = specialization;
     }
+
+    public Long getId() { return id; }
 
     public String getName() {
         return name;
