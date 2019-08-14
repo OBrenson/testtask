@@ -1,3 +1,4 @@
+package TestDB.build
 /**
  * Invoke this build file with Gradle's -b switch for POM- or
  * Maven-publishing related tasks.

@@ -1,4 +1,5 @@
 #!/local/groovy/bin/groovy
+package TestDB.build
 
 /**
  * The methods in this file may be executed directly from a native Groovy

@@ -1,4 +1,6 @@
 #!/local/groovy/bin/groovy
+package TestDB.testrun.sqltool
+
 /*
  * $Id: runtests.groovy 4809 2011-11-20 21:12:35Z unsaved $
  * Distribution is permitted under the terms of the HSQLDB license.

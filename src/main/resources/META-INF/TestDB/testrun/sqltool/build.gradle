@@ -1,3 +1,5 @@
+package TestDB.testrun.sqltool
+
 defaultTasks 'runTests'
 
 task runTests << {
