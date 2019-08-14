@@ -5,6 +5,8 @@ import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,12 +21,13 @@ public class DoctorDAO {
     }
 
     public static List<Doctor> selectDoctorByFIO(String name, String surname, String patronymic) throws SelectNullReturnException {
-        List<Doctor> doctors = em.createNativeQuery("SELECT (*) FROM Doctor WHERE " +
+        Query query = em.createNativeQuery("SELECT (*) FROM Doctor WHERE " +
                 "(name=:doc_name AND surname=:doc_surname AND patronymic=:doc_patronymic)")
                 .setParameter("doc_name", name)
                 .setParameter("doc_surname", surname)
-                .setParameter("doc_patronymic", patronymic)
-                .getResultList();
+                .setParameter("doc_patronymic", patronymic);
+
+        List<Doctor> doctors = query.getResultList();
         if(doctors == null){
             throw  new SelectNullReturnException(name+" "+surname+" "+patronymic+" FROM Doctor");
         }
@@ -46,20 +49,29 @@ public class DoctorDAO {
     }
 
     public static List<Doctor> selectAllDoctors() throws SelectNullReturnException {
-        List<Doctor> doctors = em.createNativeQuery("SELECT * FROM Doctor ").getResultList();
+        List<Doctor> doctors = em.createNativeQuery("SELECT * FROM Doctor ", Doctor.class).getResultList();
         if(doctors == null){
             throw new SelectNullReturnException("* FROM Doctor");
+        }
+        return (List<Doctor>) doctors;
+    }
+
+    private static List<Doctor> transform(List<Object[]> objects){
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+
+        for(Object[] obj : objects){
+            doctors.add(new Doctor((long)obj[0], String.valueOf(obj[1]), String.valueOf(obj[2]),
+                    String.valueOf(obj[3]), String.valueOf(obj[4])));
         }
         return doctors;
     }
 
-    public static void deleteDoctor(String name, String surname, String patronymic) throws AbsenceOfChangeException {
-        int numDeletedRows = em.createNativeQuery("DELETE FROM Doctor WHERE name=:n AND surname=:s AND patronymic=:p")
-                .setParameter("n", name)
-                .setParameter("s", surname)
-                .setParameter("p", patronymic)
+    public static void deleteDoctor(long id) throws AbsenceOfChangeException {
+        em.getTransaction().begin();
+        int numDeletedRows = em.createNativeQuery("DELETE FROM Doctor WHERE id=:i", Doctor.class)
+                .setParameter("i", id)
                 .executeUpdate();
-
+        em.getTransaction().commit();
         if(numDeletedRows == 0){
             throw new AbsenceOfChangeException("DELETE");
         }

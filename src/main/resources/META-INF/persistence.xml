@@ -10,7 +10,7 @@
         <class>com.haulmont.testtask.entities.Patient</class>
         <class>com.haulmont.testtask.entities.Recipe</class>
         <properties>
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
             <property name="javax.persistence.sql-load-script-source" value="create.sql"/>
 

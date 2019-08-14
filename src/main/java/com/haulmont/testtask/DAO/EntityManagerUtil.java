@@ -16,7 +16,6 @@ public class EntityManagerUtil {
         if (entityManager == null) {
             EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-
             return emFactory.createEntityManager();
         }
         return entityManager;

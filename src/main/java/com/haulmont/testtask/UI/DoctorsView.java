@@ -4,6 +4,8 @@ import com.haulmont.testtask.DAO.DoctorDAO;
 import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 
@@ -12,19 +14,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class DoctorsUI extends UI {
+public class DoctorsView extends VerticalLayout implements View {
 
-    @Override
-    public void init(VaadinRequest vaadinRequest) {
-        final HorizontalLayout hLayout = new HorizontalLayout();
-        hLayout.setSizeFull();
-        hLayout.setMargin(true);
+    public void startView() {
+        setSizeFull();
 
         final Label docLabel = new Label("Докторы");
-        hLayout.addComponent(docLabel);
+        addComponent(docLabel);
 
-        hLayout.addComponent(createDoctorsTable());
-
+        Table table = createDoctorsTable();
+        addComponent(table);
+        table.setPageLength(table.size());
     }
 
     private Table createDoctorsTable() {
@@ -34,8 +34,8 @@ public class DoctorsUI extends UI {
         table.addContainerProperty("Фамилия", String.class, "НЕ УКАЗАНО");
         table.addContainerProperty("Отчество", String.class, "НЕ УКАЗАНО");
         table.addContainerProperty("Специлизация", String.class, "НЕ УКАЗАНО");
-        table.addContainerProperty(" ", Button.class, null);
-        table.addContainerProperty(" ", Button.class, null);
+        table.addContainerProperty("Кнопка удаления", Button.class, null);
+        table.addContainerProperty("Кнопка редактирования", Button.class, null);
 
         List<Doctor> doctors;
         try {
@@ -50,7 +50,7 @@ public class DoctorsUI extends UI {
             table.addItem(new Object[]{doctor.getName(), doctor.getSurname(),
                     doctor.getPatronymic(), doctor.getSpecialization(),
                     createDeleteButton(doctor.getId()), new Button()
-            });
+            },0);
         }
 
         return table;
@@ -62,11 +62,17 @@ public class DoctorsUI extends UI {
                 {
                     try {
                         DoctorDAO.deleteDoctor(id);
+                        removeAllComponents();
+                        startView();
                     } catch (AbsenceOfChangeException ex) {
                         ex.printStackTrace();
-                        createDoctorsTable();
                     }
                 });
         return button;
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        startView();
     }
 }
