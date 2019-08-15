@@ -18,12 +18,12 @@ import java.util.Map;
 
 public class Test {
     public static void main(String[] args){
-        Doctor doc = new Doctor();
+/*        Doctor doc = new Doctor();
         doc.setName("Oleg");
         doc.setSurname("Brenev");
         doc.setPatronymic("Igorevich");
         doc.setSpecialization("Proctolog");
-        DoctorDAO.insertDoctor(doc);
+        DoctorDAO.insertDoctor(doc);*/
         List<Doctor> d = null;
         try {
             d = DoctorDAO.selectAllDoctors();

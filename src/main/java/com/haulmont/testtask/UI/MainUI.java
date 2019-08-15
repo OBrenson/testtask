@@ -23,12 +23,12 @@ public class MainUI extends UI {
 
         setContent(layout);
 
-        Doctor doc = new Doctor();
+/*        Doctor doc = new Doctor();
         doc.setName("Oleg");
         doc.setSurname("Brenev");
         doc.setPatronymic("Igorevich");
         doc.setSpecialization("Proctolog");
-        DoctorDAO.insertDoctor(doc);
+        DoctorDAO.insertDoctor(doc);*/
 
         Navigator navigator = new Navigator(this, this);
         navigator.addView(DOCTORS, new DoctorsView());

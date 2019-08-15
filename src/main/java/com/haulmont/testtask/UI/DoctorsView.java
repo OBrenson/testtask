@@ -46,11 +46,13 @@ public class DoctorsView extends VerticalLayout implements View {
             return table;
         }
 
+        int i = 0;
         for(Doctor doctor : doctors){
             table.addItem(new Object[]{doctor.getName(), doctor.getSurname(),
                     doctor.getPatronymic(), doctor.getSpecialization(),
                     createDeleteButton(doctor.getId()), new Button()
-            },0);
+            },i);
+            i++;
         }
 
         return table;

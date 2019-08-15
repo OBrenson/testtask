@@ -1,0 +1,3 @@
+DROP TABLE Recipe;
+DROP TABLE Patient;
+DROP TABLE Doctor;
