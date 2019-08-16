@@ -56,7 +56,7 @@ public class DoctorDAO {
         em.getTransaction().begin();
         List<Doctor> doctors = em.createNativeQuery("SELECT * FROM Doctor ", Doctor.class).getResultList();
         em.getTransaction().commit();
-        if(doctors == null){
+        if(doctors.size() == 0){
             throw new SelectNullReturnException("* FROM Doctor");
         }
         return doctors;

@@ -32,6 +32,7 @@ public class PatientDAO {
     }
 
     public static void updatePatient(Patient patient) throws AbsenceOfChangeException {
+        em.getTransaction().begin();
         int numUpdatedRows = em.createNativeQuery("UPDATE Patient SET name=:n, surname=:s, patronymic=:p, telephone=:tel WHERE id =: i")
                 .setParameter("n", patient.getName())
                 .setParameter("s", patient.getSurname())
@@ -39,7 +40,8 @@ public class PatientDAO {
                 .setParameter("tel", patient.getTelephone())
                 .setParameter("i", patient.getId())
                 .executeUpdate();
-
+        em.getTransaction().commit();
+        em.clear();
         if(numUpdatedRows == 0){
             throw new AbsenceOfChangeException("UPDATE");
         }

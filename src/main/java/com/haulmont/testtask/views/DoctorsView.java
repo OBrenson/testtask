@@ -35,6 +35,7 @@ public class DoctorsView extends VerticalLayout implements View {
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
+        hl.setSizeFull();
         hl.addComponent(left);
         hl.addComponent(center);
         hl.addComponent(right);

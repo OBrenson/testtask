@@ -3,6 +3,8 @@ package com.haulmont.testtask.views.modalwindows;
 import com.haulmont.testtask.DAO.DoctorDAO;
 import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.*;
 
 public class DoctorUpdateWindow extends Window {
@@ -17,24 +19,36 @@ public class DoctorUpdateWindow extends Window {
 
         TextField nameField = new TextField("Имя");
         nameField.setValue(doctor.getName());
+        nameField.setNullSettingAllowed(false);
+        nameField.addValidator(new StringLengthValidator("Имя должно быть более 2 симолов",2,20,true));
+        nameField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         TextField surnameField = new TextField("Фамилия");
         surnameField.setValue(doctor.getSurname());
+        surnameField.setNullSettingAllowed(false);
+        surnameField.addValidator(new StringLengthValidator("Фамилия должна быть более 2 симолов",2,20,true));
+        surnameField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         TextField patronField = new TextField("Отчество");
         patronField.setValue(doctor.getPatronymic());
+        patronField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         TextField specField = new TextField("Специлизация");
         specField.setValue(doctor.getSpecialization());
+        specField.setNullSettingAllowed(false);
+        specField.addValidator(new StringLengthValidator("Отчество должно быть более 2 симолов",2,20,true));
+        specField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         fieldsLay.addComponents(nameField, surnameField, patronField, specField);
 
         Button okBut = new Button("OK");
         okBut.addClickListener(e->{
             try {
-                DoctorDAO.updateDoctor(doctor.getId(), nameField.getValue(), surnameField.getValue(), patronField.getValue(),
-                        specField.getValue());
-                close();
+                if(nameField.isValid() && surnameField.isValid() && patronField.isValid() && specField.isValid()) {
+                    DoctorDAO.updateDoctor(doctor.getId(), nameField.getValue(), surnameField.getValue(), patronField.getValue(),
+                            specField.getValue());
+                    close();
+                }
             } catch (AbsenceOfChangeException ex) {
                 ex.printStackTrace();
             }
