@@ -5,6 +5,7 @@ import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class DoctorDAO {
                 .setParameter("doc_patronymic", patronymic);
 
         List<Doctor> doctors = query.getResultList();
+        em.clear();
         if(doctors == null){
             throw  new SelectNullReturnException(name+" "+surname+" "+patronymic+" FROM Doctor");
         }
@@ -35,33 +37,27 @@ public class DoctorDAO {
     }
 
     public static void updateDoctor(Long id, String newName, String newSurname, String newPatronymic, String specialization) throws AbsenceOfChangeException {
-        int numUpdatedRows = em.createNativeQuery("UPDATE Doctor SET name=:n, surname=:s, patronymic=:p, specialization=:spec WHERE id =: i")
+        em.getTransaction().begin();
+        int numUpdatedRows = em.createNativeQuery("UPDATE Doctor SET name=:n, surname=:s, patronymic=:p, specialization=:spec WHERE id=:i")
                 .setParameter("n", newName)
                 .setParameter("s", newSurname)
                 .setParameter("p", newPatronymic)
                 .setParameter("spec", specialization)
                 .setParameter("i", id)
                 .executeUpdate();
-
+        em.getTransaction().commit();
+        em.clear();
         if(numUpdatedRows == 0){
             throw new AbsenceOfChangeException("UPDATE");
         }
     }
 
     public static List<Doctor> selectAllDoctors() throws SelectNullReturnException {
+        em.getTransaction().begin();
         List<Doctor> doctors = em.createNativeQuery("SELECT * FROM Doctor ", Doctor.class).getResultList();
+        em.getTransaction().commit();
         if(doctors == null){
             throw new SelectNullReturnException("* FROM Doctor");
-        }
-        return (List<Doctor>) doctors;
-    }
-
-    private static List<Doctor> transform(List<Object[]> objects){
-        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
-
-        for(Object[] obj : objects){
-            doctors.add(new Doctor((long)obj[0], String.valueOf(obj[1]), String.valueOf(obj[2]),
-                    String.valueOf(obj[3]), String.valueOf(obj[4])));
         }
         return doctors;
     }

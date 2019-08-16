@@ -28,8 +28,7 @@ public class Doctor {
 
     public Doctor(){}
 
-    public Doctor(Long id, String name, String surname, String patronymic, String specialization){
-        this.id = id;
+    public Doctor(String name, String surname, String patronymic, String specialization){
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;

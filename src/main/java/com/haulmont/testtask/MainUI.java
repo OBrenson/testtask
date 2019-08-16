@@ -1,7 +1,6 @@
-package com.haulmont.testtask.UI;
+package com.haulmont.testtask;
 
-import com.haulmont.testtask.DAO.DoctorDAO;
-import com.haulmont.testtask.entities.Doctor;
+import com.haulmont.testtask.views.DoctorsView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -34,4 +33,5 @@ public class MainUI extends UI {
         navigator.addView(DOCTORS, new DoctorsView());
         navigator.navigateTo(DOCTORS);
     }
+
 }
