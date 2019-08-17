@@ -35,7 +35,7 @@ public class DoctorAddWindow extends Window {
         specField.addValidator(new StringLengthValidator("Отчество должно быть более 2 симолов",2,20,true));
         specField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
-        fieldsLay.addComponents(nameField, surnameField, patronField, specField);
+        fieldsLay.addComponents(surnameField, nameField, patronField, specField);
 
         Button okBut = new Button("OK");
         okBut.addClickListener(e -> {

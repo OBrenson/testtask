@@ -1,16 +1,16 @@
 package com.haulmont.testtask.views.modalwindows;
 
 import com.haulmont.testtask.DAO.DoctorDAO;
+import com.haulmont.testtask.DAO.PatientDAO;
 import com.haulmont.testtask.entities.Doctor;
-import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
+import com.haulmont.testtask.entities.Patient;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.*;
 
-public class DoctorUpdateWindow extends Window {
-
-    public DoctorUpdateWindow(Doctor doctor){
-        super("Редактирование записи о докторе");
+public class PatientAddWindow extends Window {
+    public PatientAddWindow() {
+        super("Редактирование записи о пациенте");
 
         setModal(true);
 
@@ -18,44 +18,37 @@ public class DoctorUpdateWindow extends Window {
         fieldsLay.setMargin(true);
 
         TextField nameField = new TextField("Имя");
-        nameField.setValue(doctor.getName());
         nameField.setNullSettingAllowed(false);
         nameField.addValidator(new StringLengthValidator("Имя должно быть более 2 симолов",2,20,true));
         nameField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         TextField surnameField = new TextField("Фамилия");
-        surnameField.setValue(doctor.getSurname());
         surnameField.setNullSettingAllowed(false);
         surnameField.addValidator(new StringLengthValidator("Фамилия должна быть более 2 симолов",2,20,true));
         surnameField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
         TextField patronField = new TextField("Отчество");
-        patronField.setValue(doctor.getPatronymic());
         patronField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
 
-        TextField specField = new TextField("Специлизация");
-        specField.setValue(doctor.getSpecialization());
-        specField.setNullSettingAllowed(false);
-        specField.addValidator(new StringLengthValidator("Отчество должно быть более 2 симолов",2,20,true));
-        specField.addValidator(new RegexpValidator("[A-z]|[А-я]",false, "Только буквы"));
+        TextField telField = new TextField("Телефон");
+        telField.setNullSettingAllowed(false);
+        telField.setValue("+7");
+        telField.addValidator(new StringLengthValidator("Пожалуйста введите номер телефона",0,20,true));
+        telField.addValidator(new RegexpValidator("^[+]|[\\d][\\d]",false, "Только буквы"));
 
-        fieldsLay.addComponents(surnameField, nameField, patronField, specField);
+        fieldsLay.addComponents(surnameField, nameField, patronField, telField);
 
         Button okBut = new Button("OK");
-        okBut.addClickListener(e->{
-            try {
-                if(nameField.isValid() && surnameField.isValid() && patronField.isValid() && specField.isValid()) {
-                    DoctorDAO.updateDoctor(doctor.getId(), nameField.getValue(), surnameField.getValue(), patronField.getValue(),
-                            specField.getValue());
-                    close();
-                }
-            } catch (AbsenceOfChangeException ex) {
-                ex.printStackTrace();
+        okBut.addClickListener(e -> {
+            if(nameField.isValid() && surnameField.isValid() && patronField.isValid() && telField.isValid()) {
+                PatientDAO.insertPatient(new Patient(nameField.getValue(), surnameField.getValue(), patronField.getValue(),
+                        telField.getValue()));
+                close();
             }
         });
 
         Button cancelBut = new Button("Отмена");
-        cancelBut.addClickListener(e->{
+        cancelBut.addClickListener(e -> {
             close();
         });
         HorizontalLayout butLay = new HorizontalLayout();

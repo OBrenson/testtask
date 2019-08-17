@@ -1,21 +1,22 @@
 package com.haulmont.testtask.views;
 
 import com.haulmont.testtask.DAO.DoctorDAO;
-import com.haulmont.testtask.MainUI;
+import com.haulmont.testtask.DAO.PatientDAO;
 import com.haulmont.testtask.entities.Doctor;
+import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
 import com.haulmont.testtask.views.modalwindows.DoctorAddWindow;
 import com.haulmont.testtask.views.modalwindows.DoctorUpdateWindow;
-import com.vaadin.navigator.Navigator;
+import com.haulmont.testtask.views.modalwindows.PatientAddWindow;
+import com.haulmont.testtask.views.modalwindows.PatientUpdateWindow;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 
 import java.util.List;
 
-public class DoctorsView extends VerticalLayout implements View {
-
+public class PatientsView extends VerticalLayout implements View {
     public void startView() {
         setSizeFull();
 
@@ -27,14 +28,12 @@ public class DoctorsView extends VerticalLayout implements View {
         center.setSizeFull();
         right.setSizeFull();
 
-        Table table = createDoctorsTable();
+        Table table = createPatientsTable();
         addComponent(table);
         table.setSizeFull();
         table.setPageLength(table.size());
 
         center.addComponent(createAddButton());
-
-        left.addComponent(createButtonGoPatient());
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
@@ -46,27 +45,19 @@ public class DoctorsView extends VerticalLayout implements View {
         addComponent(hl);
     }
 
-    private Button createButtonGoPatient(){
-        Button goPatient = new Button("Пациенты");
-        goPatient.addClickListener(e -> {
-            UI.getCurrent().getNavigator().navigateTo(MainUI.PATIENTS);
-        });
-        return goPatient;
-    }
-
-    private Table createDoctorsTable() {
-        Table table = new Table("Список докторов");
+    private Table createPatientsTable() {
+        Table table = new Table("Список пациентов");
 
         table.addContainerProperty("Имя", String.class, "НЕ УКАЗАНО");
         table.addContainerProperty("Фамилия", String.class, "НЕ УКАЗАНО");
         table.addContainerProperty("Отчество", String.class, "НЕ УКАЗАНО");
-        table.addContainerProperty("Специлизация", String.class, "НЕ УКАЗАНО");
+        table.addContainerProperty("Телефон", String.class, "НЕ УКАЗАНО");
         table.addContainerProperty("Кнопка удаления", Button.class, null);
         table.addContainerProperty("Кнопка редактирования", Button.class, null);
 
-        List<Doctor> doctors;
+        List<Patient> patients;
         try {
-            doctors = DoctorDAO.selectAllDoctors();
+            patients = PatientDAO.selectAllPatients();
         } catch (SelectNullReturnException e) {
             e.printStackTrace();
             table.addItem(new Object[]{"НЕТ ЗАПИСЕЙ", " ", " ", " ", null, null}, 0);
@@ -74,10 +65,10 @@ public class DoctorsView extends VerticalLayout implements View {
         }
 
         int i = 0;
-        for (Doctor doctor : doctors) {
-            table.addItem(new Object[]{doctor.getName(), doctor.getSurname(),
-                    doctor.getPatronymic(), doctor.getSpecialization(),
-                    createDeleteButton(doctor.getId()), createUpdateButton(doctor)
+        for (Patient patient: patients) {
+            table.addItem(new Object[]{patient.getName(), patient.getSurname(),
+                    patient.getPatronymic(), patient.getTelephone(),
+                    createDeleteButton(patient.getId()), createUpdateButton(patient)
             }, i);
             i++;
         }
@@ -90,7 +81,7 @@ public class DoctorsView extends VerticalLayout implements View {
         button.addClickListener(e ->
         {
             try {
-                DoctorDAO.deleteDoctor(id);
+                PatientDAO.deletePatient(id);
                 refreshView();
             } catch (AbsenceOfChangeException ex) {
                 ex.printStackTrace();
@@ -101,9 +92,9 @@ public class DoctorsView extends VerticalLayout implements View {
         return button;
     }
 
-    private Button createUpdateButton(Doctor doctor) {
+    private Button createUpdateButton(Patient patient) {
         Button button = new Button("Редактировать");
-        DoctorUpdateWindow window = new DoctorUpdateWindow(doctor);
+        PatientUpdateWindow window = new PatientUpdateWindow(patient);
         window.addCloseListener(new Window.CloseListener() {
             @Override
             public void windowClose(Window.CloseEvent closeEvent) {
@@ -122,7 +113,7 @@ public class DoctorsView extends VerticalLayout implements View {
 
     private Button createAddButton(){
         Button button = new Button("Добавить");
-        DoctorAddWindow window = new DoctorAddWindow();
+        PatientAddWindow window = new PatientAddWindow();
         window.addCloseListener(new Window.CloseListener() {
             @Override
             public void windowClose(Window.CloseEvent closeEvent) {
