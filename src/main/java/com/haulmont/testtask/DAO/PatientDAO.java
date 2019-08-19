@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PatientDAO {
 
-    private static EntityManager em = EntityManagerUtil.getEntityManager();
+    private static final EntityManager em = EntityManagerUtil.getEntityManager();
 
     public static void insertPatient(Patient patient) {
         em.getTransaction().begin();

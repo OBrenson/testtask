@@ -2,6 +2,7 @@ package com.haulmont.testtask.views;
 
 import com.haulmont.testtask.DAO.DoctorDAO;
 import com.haulmont.testtask.DAO.PatientDAO;
+import com.haulmont.testtask.MainUI;
 import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
@@ -34,6 +35,8 @@ public class PatientsView extends VerticalLayout implements View {
         table.setPageLength(table.size());
 
         center.addComponent(createAddButton());
+        left.addComponent(createButtonNavigRecipe());
+        right.addComponent(createButtonNavigDoctor());
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
@@ -43,6 +46,22 @@ public class PatientsView extends VerticalLayout implements View {
         hl.addComponent(right);
 
         addComponent(hl);
+    }
+
+    private Button createButtonNavigRecipe(){
+        Button navigRecipe = new Button("Рецепты");
+        navigRecipe.addClickListener(e->{
+            UI.getCurrent().getNavigator().navigateTo(MainUI.RECIPES);
+        });
+        return navigRecipe;
+    }
+
+    private Button createButtonNavigDoctor(){
+        Button navigDoctor = new Button("Доктора");
+        navigDoctor.addClickListener(e->{
+            UI.getCurrent().getNavigator().navigateTo(MainUI.DOCTORS);
+        });
+        return navigDoctor;
     }
 
     private Table createPatientsTable() {
@@ -133,6 +152,6 @@ public class PatientsView extends VerticalLayout implements View {
     }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        startView();
+        refreshView();
     }
 }

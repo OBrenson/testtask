@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 
 public class PatientAddWindow extends Window {
     public PatientAddWindow() {
-        super("Редактирование записи о пациенте");
+        super("Добавление записи о пациенте");
 
         setModal(true);
 

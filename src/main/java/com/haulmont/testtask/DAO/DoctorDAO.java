@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DoctorDAO {
 
-    private static EntityManager em = EntityManagerUtil.getEntityManager();
+    private static final EntityManager em = EntityManagerUtil.getEntityManager();
 
     public static void insertDoctor(Doctor doctor) {
         em.getTransaction().begin();
@@ -21,19 +21,15 @@ public class DoctorDAO {
         em.getTransaction().commit();
     }
 
-    public static List<Doctor> selectDoctorByFIO(String name, String surname, String patronymic) throws SelectNullReturnException {
-        Query query = em.createNativeQuery("SELECT (*) FROM Doctor WHERE " +
-                "(name=:doc_name AND surname=:doc_surname AND patronymic=:doc_patronymic)")
-                .setParameter("doc_name", name)
-                .setParameter("doc_surname", surname)
-                .setParameter("doc_patronymic", patronymic);
-
-        List<Doctor> doctors = query.getResultList();
+    public static Doctor selectDoctorByID(Long id) throws SelectNullReturnException {
+        Query query = em.createNativeQuery("SELECT (*) FROM Doctor WHERE id=:i", Doctor.class)
+                .setParameter("i", id);
+        Doctor doctor = (Doctor) query.getSingleResult();
         em.clear();
-        if(doctors == null){
-            throw  new SelectNullReturnException(name+" "+surname+" "+patronymic+" FROM Doctor");
+        if(doctor == null){
+            throw  new SelectNullReturnException("id = " +id+" FROM Doctor");
         }
-        return doctors;
+        return doctor;
     }
 
     public static void updateDoctor(Long id, String newName, String newSurname, String newPatronymic, String specialization) throws AbsenceOfChangeException {

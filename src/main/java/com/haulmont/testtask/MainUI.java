@@ -2,6 +2,7 @@ package com.haulmont.testtask;
 
 import com.haulmont.testtask.views.DoctorsView;
 import com.haulmont.testtask.views.PatientsView;
+import com.haulmont.testtask.views.RecipesView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -21,6 +22,7 @@ public class MainUI extends UI {
     protected void init(VaadinRequest request) {
         navigator.addView(DOCTORS, new DoctorsView());
         navigator.addView(PATIENTS, new PatientsView());
+        navigator.addView(RECIPES, new RecipesView());
         navigator.navigateTo(DOCTORS);
     }
 }

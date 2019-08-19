@@ -14,12 +14,10 @@ CREATE TABLE Patient (
 );
 CREATE TABLE Recipe (
     id INTEGER IDENTITY PRIMARY KEY,
-    description VARCHAR(15),
-    patientId INTEGER NOT NULL,
-    doctorId INTEGER NOT NULL,
+    description VARCHAR(250),
+    patientId INTEGER FOREIGN KEY REFERENCES Patient(id),
+    doctorId INTEGER FOREIGN KEY REFERENCES Doctor(id),
     dateRecipeCreation DATE,
     validityDays INTEGER,
-    priority VARCHAR(20),
-    FOREIGN KEY (doctorId) REFERENCES Doctor(id),
-    FOREIGN KEY (patientId) REFERENCES Patient(id)
+    priority VARCHAR(10)
 );
