@@ -7,10 +7,7 @@ import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.entities.Patient;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
-import com.haulmont.testtask.views.modalwindows.DoctorAddWindow;
-import com.haulmont.testtask.views.modalwindows.DoctorUpdateWindow;
-import com.haulmont.testtask.views.modalwindows.PatientAddWindow;
-import com.haulmont.testtask.views.modalwindows.PatientUpdateWindow;
+import com.haulmont.testtask.views.modalwindows.*;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -104,6 +101,7 @@ public class PatientsView extends VerticalLayout implements View {
                 refreshView();
             } catch (AbsenceOfChangeException ex) {
                 ex.printStackTrace();
+                UI.getCurrent().addWindow(new DeleteExceptionWindow());
             }
         });
         button.setSizeFull();

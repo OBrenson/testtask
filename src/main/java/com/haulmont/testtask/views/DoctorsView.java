@@ -5,7 +5,9 @@ import com.haulmont.testtask.MainUI;
 import com.haulmont.testtask.entities.Doctor;
 import com.haulmont.testtask.exceptions.AbsenceOfChangeException;
 import com.haulmont.testtask.exceptions.SelectNullReturnException;
+import com.haulmont.testtask.views.modalwindows.DeleteExceptionWindow;
 import com.haulmont.testtask.views.modalwindows.DoctorAddWindow;
+import com.haulmont.testtask.views.modalwindows.DoctorStatisticWindow;
 import com.haulmont.testtask.views.modalwindows.DoctorUpdateWindow;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -17,6 +19,8 @@ import java.util.List;
 public class DoctorsView extends VerticalLayout implements View {
 
     public void startView() {
+
+        DoctorDAO.getNumRecipes();
         setSizeFull();
 
         VerticalLayout left = new VerticalLayout();
@@ -24,7 +28,6 @@ public class DoctorsView extends VerticalLayout implements View {
         VerticalLayout right = new VerticalLayout();
 
         left.setSizeFull();
-        center.setSizeFull();
         right.setSizeFull();
 
         Table table = createDoctorsTable();
@@ -32,9 +35,12 @@ public class DoctorsView extends VerticalLayout implements View {
         table.setSizeFull();
         table.setPageLength(table.size());
 
+
         center.addComponent(createAddButton());
+        center.addComponent(createStatisticButton());
 
         left.addComponent(createButtonGoPatient());
+        right.addComponent(createButtonNavigRecipe());
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setSizeFull();
@@ -52,6 +58,14 @@ public class DoctorsView extends VerticalLayout implements View {
             UI.getCurrent().getNavigator().navigateTo(MainUI.PATIENTS);
         });
         return goPatient;
+    }
+
+    private Button createStatisticButton(){
+        Button statisticBut = new Button("Показать статистику врачей");
+        statisticBut.addClickListener(e->{
+            UI.getCurrent().addWindow(new DoctorStatisticWindow());
+        });
+        return statisticBut;
     }
 
     private Table createDoctorsTable() {
@@ -85,6 +99,14 @@ public class DoctorsView extends VerticalLayout implements View {
         return table;
     }
 
+    private Button createButtonNavigRecipe(){
+        Button navigRecipe = new Button("Рецепты");
+        navigRecipe.addClickListener(e->{
+            UI.getCurrent().getNavigator().navigateTo(MainUI.RECIPES);
+        });
+        return navigRecipe;
+    }
+
     private Button createDeleteButton(Long id) {
         Button button = new Button("Удалить");
         button.addClickListener(e ->
@@ -94,6 +116,7 @@ public class DoctorsView extends VerticalLayout implements View {
                 refreshView();
             } catch (AbsenceOfChangeException ex) {
                 ex.printStackTrace();
+                UI.getCurrent().addWindow(new DeleteExceptionWindow());
             }
         });
         button.setSizeFull();

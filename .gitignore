@@ -3,7 +3,3 @@ target/
 *.iml
 *.ipr
 *.iws
-TestDB.lck
-TestDB.log
-TestDB.properties
-TestDB.script

@@ -3,5 +3,7 @@ INSERT INTO Doctor (name, surname, patronymic, specialization) VALUES ('Kirill',
 
 INSERT INTO Patient (name, surname, patronymic, telephone) VALUES ('Валентина','Очкасова','Андреевна','89375132302');
 INSERT INTO Patient (name, surname, patronymic, telephone) VALUES ('Анастасия','Калядина','Сергеевна','89375132302');
+
 INSERT INTO Recipe (description, patientID, doctorId, dateRecipeCreation, validityDays, priority) VALUES ('asd', 0, 0, '2001-01-01', 123, 'Нормальный');
+INSERT INTO Recipe (description, patientID, doctorId, dateRecipeCreation, validityDays, priority) VALUES ('asd', 1, 1, '2001-01-01', 123, 'Нормальный');
 
