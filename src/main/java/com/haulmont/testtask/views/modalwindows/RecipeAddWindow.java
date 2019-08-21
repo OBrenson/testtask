@@ -24,9 +24,9 @@ public class RecipeAddWindow extends Window {
         HorizontalLayout fieldsLay = new HorizontalLayout();
         fieldsLay.setMargin(true);
 
-        TextField discripField = new TextField("Описание");
-        discripField.setNullSettingAllowed(false);
-        discripField.addValidator(new StringLengthValidator("Введите описание", 1, 250, true));
+        TextArea discripArea = new TextArea("Описание");
+        discripArea.setNullSettingAllowed(false);
+        discripArea.addValidator(new StringLengthValidator("Введите описание", 1, 250, true));
 
         ListSelect patientFIOList= new ListSelect("Пациенты");
         patientFIOList.addItems(getFIOs(patients));
@@ -46,12 +46,12 @@ public class RecipeAddWindow extends Window {
         ListSelect priorityList = new ListSelect();
         priorityList.addItems(Priorities.NORMAL.toString(), Priorities.CITO.toString(), Priorities.STATIM.toString());
 
-        fieldsLay.addComponents(discripField, patientFIOList, doctorsFIOList, date, daysField, priorityList);
+        fieldsLay.addComponents(discripArea, patientFIOList, doctorsFIOList, date, daysField, priorityList);
 
         Button okBut = new Button("OK");
         okBut.addClickListener(e -> {
-            if (discripField.isValid() && daysField.isValid()) {
-                RecipeDAO.insertRecipe(new Recipe(discripField.getValue(),patients.get(Integer.parseInt(patientFIOList.getValue().toString().substring(0,1))-1).getId(),
+            if (discripArea.isValid() && daysField.isValid()) {
+                RecipeDAO.insertRecipe(new Recipe(discripArea.getValue(),patients.get(Integer.parseInt(patientFIOList.getValue().toString().substring(0,1))-1).getId(),
                         doctors.get(Integer.parseInt(doctorsFIOList.getValue().toString().substring(0,1))-1).getId(),
                         date.getValue(), Integer.parseInt(daysField.getValue()), priorityList.getValue().toString()));
                 close();
